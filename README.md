@@ -1,3 +1,104 @@
-## URL 
-### s3
-[https://ap-northeast-2.console.aws.amazon.com/s3/buckets/hanghae-10week?region=ap-northeast-2&bucketType=general&tab=properties](http://hanghae-10week.s3-website.ap-northeast-2.amazonaws.com/)
+# Chapter 4-2. 성능 최적화 Part 2 Basic
+
+배포 주소
+
+- http://hanghae-10week.s3-website.ap-northeast-2.amazonaws.com/
+
+성능 개선 보고서
+
+측정 도구
+
+- PageSpeed Insights
+
+성능 전후 비교
+**항목 | 성능 개선 전 | 성능 개선 후**
+LCP | 14.3s | 1.2s
+분석 링크 | [성능 개선 전 분석 결과] | [성능 개선 후 분석 결과]
+
+주요 개선 분석
+
+1. 이미지 최적화 필요성
+
+   - 이유: 웹 성능을 위한 이미지 최적화가 되어있지 않아 페이지 로드 시간 증가 및 대역폭 사용량 증가
+   - 문제점:
+     - 최적화되지 않은 대형 히어로 이미지
+     - 이미지 width/height 속성 미지정
+     - 이미지 포맷 최적화 부재
+   - 해결방안:
+     - 모든 이미지에 width와 height 속성 추가 (예: Hero_Desktop.webp: width="1280" height="595")
+     - WebP 포맷으로 이미지 변환 (vr1.webp, vr2.webp, vr3.webp)
+     - 접근성과 SEO를 위한 설명적인 alt 텍스트 추가
+
+2. 폰트 및 리소스 로딩 최적화
+
+   - 이유: 비효율적인 폰트 로딩과 리소스 관리로 인한 렌더링 블로킹 이슈 발생
+   - 문제점:
+     - 폰트 최적화 전략 부재
+     - 다수의 스크립트 로드로 인한 초기 렌더링 영향
+   - 해결방안:
+     - 중요하지 않은 스크립트에 defer 속성 추가:
+       ```html
+       <script defer type="text/javascript" src="/js/main.js"></script>
+       <script defer type="text/javascript" src="/js/products.js"></script>
+       ```
+     - preload를 활용한 폰트 로딩 전략 최적화
+
+3. 스크립트 로딩 최적화
+
+   - 이유: 스크립트가 초기 페이지 렌더링을 차단하여 성능에 영향
+   - 문제점:
+     - 비중요 스크립트의 동기식 로딩
+     - 최적화되지 않은 서드파티 스크립트 로딩 (Google Tag Manager, Cookie Consent)
+   - 해결방안:
+     - Google Tag Manager async 로딩 구현
+     - 비중요 스크립트 지연 로딩
+     - 서드파티 스크립트 로딩 순서 최적화
+
+4. HTML 구조 및 리소스 관리
+   - 이유: 초기 페이지 로드 및 콘텐츠 가시성 향상
+   - 문제점:
+     - 성능에 영향을 미치는 비구조화된 HTML
+     - 리소스 우선순위화 부재
+   - 해결방안:
+     - 시맨틱 요소를 활용한 적절한 HTML 구조 구현
+     - viewport 및 문자 인코딩을 위한 적절한 메타 태그 추가
+     - 논리적인 콘텐츠 섹션 구조화 (header, hero, best-sellers, newsletter, footer)
+
+성능 개선 결과
+
+1. LCP (Largest Contentful Paint)
+
+   - 개선 전: 14.3초
+   - 개선 후: 1.2초
+   - 효과: 메인 콘텐츠 로딩 시간 91.6% 개선
+
+2. 리소스 로딩
+
+   - 개선 전: 최적화되지 않은 동기식 로딩
+   - 개선 후: 적절한 리소스 우선순위화와 최적화된 비동기/지연 로딩
+   - 효과: 더 빠른 초기 페이지 렌더링과 향상된 사용자 경험
+
+3. 이미지 로딩
+
+   - 개선 전: width/height 속성 없음, 최적화되지 않은 포맷
+   - 개선 후:
+     - 적절한 이미지 속성 추가
+     - WebP 포맷 구현
+     - 최적화된 이미지 로딩 전략
+   - 효과: CLS 감소 및 더 빠른 이미지 로딩
+
+4. 스크립트 및 리소스 관리
+   - 개선 전: 블로킹 스크립트 로드, 최적화되지 않은 리소스 로딩
+   - 개선 후:
+     - 비중요 스크립트 지연 로딩
+     - 최적화된 서드파티 스크립트 로딩
+     - 개선된 리소스 우선순위화
+   - 효과: 향상된 페이지 상호작용성과 더 빠른 콘텐츠 전달
+
+향후 최적화 권장사항
+
+1. 크리티컬 CSS 로딩 전략 구현
+2. 서드파티 스크립트 로딩 추가 최적화
+3. 오프라인 기능을 위한 서비스 워커 도입 검토
+4. 자동화된 최적화를 위한 이미지 압축 파이프라인 추가
+5. 반응형 이미지 로딩 전략 구현
