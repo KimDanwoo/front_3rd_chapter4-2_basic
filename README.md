@@ -1,12 +1,16 @@
 # Chapter 4-2. 성능 최적화 Part 2 Basic
 
-배포 주소
+## 배포 주소
 
+### S3
 - http://hanghae-10week.s3-website.ap-northeast-2.amazonaws.com/
 
-성능 개선 보고서
+### CloudFront
+- https://d3dxkx92s1bljy.cloudfront.net/
 
-측정 도구
+## 성능 개선 보고서
+
+### 측정 도구
 
 - PageSpeed Insights
 
